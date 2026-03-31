@@ -32,19 +32,7 @@ function setup() {
       rect(x, y, 1, 1);
       console.log(x, y);
 
-      // Calcolo distanza dal centro
-      let distanceFromCenter = dist(centerX, centerY, x, y);
-      let normDistanceFromCenter = distanceFromCenter / (width / 2); // 0-1
-      
-      // Calcolo altitudine
-      let altitude = 1 - normDistanceFromCenter; // 1 al centro, 0 ai bordi
-
-      // Perlin
-      noiseDetail(6); // Dettaglio del rumore
-      let perlin = noise(x / PERLIN_SCALE, y / PERLIN_SCALE); // Scala per variare la frequenza
-      altitude *= perlin;
-      altitude += perlin;
-      altitude -= 0.5;;
+      let altitude = computeAltitude(x, y, centerX, centerY);
 
       // Assegniamo il colore
       let sealevel = 0.2; // Soglia per il livello del mare
@@ -69,19 +57,7 @@ function setup() {
       rect(x, y, 1, 1);
       console.log(x, y);
 
-      // Calcolo distanza dal centro
-      let distanceFromCenter = dist(centerX, centerY, x, y);
-      let normDistanceFromCenter = distanceFromCenter / (width / 2); // 0-1
-      
-      // Calcolo altitudine
-      let altitude = 1 - normDistanceFromCenter; // 1 al centro, 0 ai bordi
-
-      // Perlin
-      noiseDetail(6); // Dettaglio del rumore
-      let perlin = noise(x / PERLIN_SCALE, y / PERLIN_SCALE); // Scala per variare la frequenza
-      altitude *= perlin;
-      altitude += perlin;
-      altitude -= 0.5;;
+      let altitude = computeAltitude(x, y);
 
       // Assegniamo il colore
       let sealevel = 0.2; // Soglia per il livello del mare
@@ -95,6 +71,24 @@ function setup() {
        if (random() < 0.1 && altitude > beachLevel) {
         image (ominoImage, x, y, SPRITE_SIZE, SPRITE_SIZE); 
        }
-     }
+    }
   }
 }
+
+function computeAltitude(x, y, centerX, centerY) {
+  // Calcolo distanza dal centro
+      let distanceFromCenter = dist(centerX, centerY, x, y);
+      let normDistanceFromCenter = distanceFromCenter / (width / 2); // 0-1
+      
+      // Calcolo altitudine
+      let altitude = 1 - normDistanceFromCenter; // 1 al centro, 0 ai bordi
+
+      // Perlin
+      noiseDetail(6); // Dettaglio del rumore
+      let perlin = noise(x / PERLIN_SCALE, y / PERLIN_SCALE); // Scala per variare la frequenza
+      altitude *= perlin;
+      altitude += perlin;
+      altitude -= 0.5; // Centriamo il rumore intorno a 0
+
+            return altitude;
+      }
