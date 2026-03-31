@@ -1,3 +1,4 @@
+let PePERLIN_SCALE = 50;
 function setup() {
   createCanvas(200, 200);
   background(0);
@@ -16,9 +17,26 @@ function setup() {
       let distanceFromCenter = dist(centerX, centerY, x, y);
       let normDistanceFromCenter = distanceFromCenter / (width / 2); // 0-1
       
+      // Calcolo altitudine
       let altitude = 1 - normDistanceFromCenter; // 1 al centro, 0 ai bordi
 
-      fill(altitude* 255);
+      // Perlin
+      noiseDetail(6); // Dettaglio del rumore
+      let perlin = noise(x / PePERLIN_SCALE, y / PePERLIN_SCALE); // Scala per variare la frequenza
+      altitude *= perlin;
+
+      // Assegniamo il colore
+      let sealevel = 0.2; // Soglia per il livello del mare
+      let beachLevel = 0.25; // Soglia per la spiaggia
+       if (altitude < sealevel) {
+        fill(0, 0, 255); // Terra
+      } else if (altitude < beachLevel) {
+        fill(255, 255, 0); // Spiaggia
+      } else {
+        fill(0, 255, 0); // Acqua
+      }
+      
+
       rect(x, y, 1, 1);
      }
   }
