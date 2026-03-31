@@ -1,14 +1,26 @@
-let PePERLIN_SCALE = 50;
+let PePERLIN_SCALE = 200;
+let TITLE_SIZE = 32;
+
+let grassImage;
+let sandImage;
+let waterImage;
+
+function preload() {
+  grassImage = loadImage("tiles/prato.png");
+  sandImage = loadImage("tiles/sabbia.png");
+  waterImage = loadImage("tiles/acqua.png");
+}
+
 function setup() {
-  createCanvas(200, 200);
-  background(0);
+  createCanvas(windowWidth, windowHeight);
+
   noStroke();
 
   let centerX = width / 2;
   let centerY = height / 2;
 
-  for (let x = 0; x < width; x++) {
-    for (let y = 0; y < height; y++) {
+  for (let x = 0; x < width; x = x + TITLE_SIZE) {
+    for (let y = 0; y < height; y = y + TITLE_SIZE) {
       fill(x, y, 0);
       rect(x, y, 1, 1);
       console.log(x, y);
@@ -24,20 +36,24 @@ function setup() {
       noiseDetail(6); // Dettaglio del rumore
       let perlin = noise(x / PePERLIN_SCALE, y / PePERLIN_SCALE); // Scala per variare la frequenza
       altitude *= perlin;
+      altitude += perlin;
+      altitude -= 0.5;;
 
       // Assegniamo il colore
       let sealevel = 0.2; // Soglia per il livello del mare
-      let beachLevel = 0.25; // Soglia per la spiaggia
+      let beachLevel = 0.28; // Soglia per la spiaggia
+
+      let img;
        if (altitude < sealevel) {
-        fill(0, 0, 255); // Terra
+        img = waterImage; // Acqua
       } else if (altitude < beachLevel) {
-        fill(255, 255, 0); // Spiaggia
+        img = sandImage; // Spiaggia
       } else {
-        fill(0, 255, 0); // Acqua
+        img = grassImage; // Terra
       }
       
 
-      rect(x, y, 1, 1);
+      image(img, x, y, TITLE_SIZE, TITLE_SIZE);
      }
   }
 }
