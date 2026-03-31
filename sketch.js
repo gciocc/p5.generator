@@ -1,6 +1,7 @@
 let PERLIN_SCALE = 200;
 let TITLE_SIZE = 10;
 let SPRITE_SIZE = 32;
+let FISHES_SIZE = 16;
 
 let grassImage;
 let sandImage;
@@ -9,6 +10,9 @@ let waterImage;
 let ominaImage;
 let ominoImage;
 
+let FishImage;
+let TurtleImage;
+
 function preload() {
   grassImage = loadImage("assets/tiles/prato.png");
   sandImage = loadImage("assets/tiles/sabbia.png");
@@ -16,6 +20,9 @@ function preload() {
 
   ominaImage = loadImage("assets/sprites/omina.png");
   ominoImage = loadImage("assets/sprites/omino.png");
+
+  FishImage = loadImage("assets/fishes/Fish.png");
+  TurtleImage = loadImage("assets/fishes/Turtle.png");
 }
 
 function setup() {
@@ -28,9 +35,6 @@ function setup() {
 
   for (let x = 0; x < width; x = x + TITLE_SIZE) {
     for (let y = 0; y < height; y = y + TITLE_SIZE) {
-      fill(x, y, 0);
-      rect(x, y, 1, 1);
-      console.log(x, y);
 
       let altitude = computeAltitude(x, y, centerX, centerY);
 
@@ -53,23 +57,29 @@ function setup() {
 
   for (let x = 0; x < width; x = x + SPRITE_SIZE) {
     for (let y = 0; y < height; y = y + SPRITE_SIZE) {
-      fill(x, y, 0);
-      rect(x, y, 1, 1);
-      console.log(x, y);
 
-      let altitude = computeAltitude(x, y);
+      let altitude = computeAltitude(x, y, centerX, centerY);
 
       // Assegniamo il colore
       let sealevel = 0.2; // Soglia per il livello del mare
       let beachLevel = 0.28; // Soglia per la spiaggia
+      let deepWaterLevel = 0.05; // Soglia per l'acqua profonda
       
       // Omina
        if (random() < 0.1 && altitude > beachLevel) {
         image (ominaImage, x, y, SPRITE_SIZE, SPRITE_SIZE);
         }
-       // Omino
+      // Omino
        if (random() < 0.1 && altitude > beachLevel) {
         image (ominoImage, x, y, SPRITE_SIZE, SPRITE_SIZE); 
+       }
+      // Pesce
+       if (random() < 0.1 && altitude < deepWaterLevel) {
+        image (FishImage, x, y, FISHES_SIZE, FISHES_SIZE);
+       }
+      // Tartaruga
+       if (random() < 0.1 && altitude < deepWaterLevel) {
+        image (TurtleImage, x, y, FISHES_SIZE, FISHES_SIZE);
        }
     }
   }
